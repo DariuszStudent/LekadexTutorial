@@ -1,37 +1,30 @@
 ﻿using Lekadex.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Lekadex.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController()
         {
-            _logger = logger;
+
         }
 
         public IActionResult Index()
         {
-            return View();
+            return View(TestDatabasePleaseDelete.Doctors);
         }
 
-        public IActionResult Privacy()
+        public IActionResult View(int indexOfDoctor)
         {
-            return View();
+            return RedirectToAction("Index", "Prescription", TestDatabasePleaseDelete.Doctors.ElementAt(indexOfDoctor));
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Delete(int indexOfDoctor)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(TestDatabasePleaseDelete.Doctors);
         }
     }
 }
