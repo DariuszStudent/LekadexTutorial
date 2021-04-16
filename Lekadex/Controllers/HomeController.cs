@@ -21,6 +21,19 @@ namespace Lekadex.Controllers
 
         }
 
+        public IActionResult Add()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Add(DoctorViewModel doctorVw)
+        {
+            TestDatabasePleaseDelete.Doctors.Add(doctorVw);
+
+            return RedirectToAction("Index");
+        }
+
         public IActionResult View(int indexOfDoctor)
         {
             return RedirectToAction("Index", "Prescription", new
