@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace Lekadex.Core
 {
-    public class DoctorsMapper
+    public class DTOMapper
     {
         private IMapper mMapper;
 
-        public DoctorsMapper()
+        public DTOMapper()
         {
             mMapper = new MapperConfiguration(config =>
             {
@@ -17,7 +17,7 @@ namespace Lekadex.Core
                       .ReverseMap();
                 config.CreateMap<Prescription, PrescriptionDto>()
                       .ReverseMap();
-                config.CreateMap<Medicine, MedicineDto>()
+                config.CreateMap<Doctor, DoctorDto>()
                       .ReverseMap();
             }).CreateMapper();
         }

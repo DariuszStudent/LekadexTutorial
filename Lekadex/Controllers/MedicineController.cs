@@ -1,4 +1,5 @@
-﻿using Lekadex.Models;
+﻿using Lekadex.Core;
+using Lekadex.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
@@ -6,31 +7,33 @@ namespace Lekadex.Controllers
 {
     public class MedicineController : Controller
     {
-        private int IndexOfDoctor { get; set; }
-        private int IndexOfPrescription { get; set; }
+        private readonly IDoctorManager mDoctorManager;
+        private readonly ViewModelMapper mViewModelMapper;
 
-        public MedicineController()
+        private int DoctorId { get; set; }
+        private int PrescriptionId { get; set; }
+
+        public MedicineController(IDoctorManager doctorManager, ViewModelMapper viewModelMapper)
         {
-           
+            mDoctorManager = doctorManager;
+            mViewModelMapper = viewModelMapper;
         }
 
-        public IActionResult Index(int indexOfDoctor, int indexOfPrescription, string filterString)
+        public IActionResult Index(int doctorId, int prescriptionId, string filterString)
         {
-            IndexOfDoctor = indexOfDoctor;
-            IndexOfPrescription = indexOfPrescription;
+            DoctorId = doctorId;
+            PrescriptionId = prescriptionId;
 
-            if (string.IsNullOrEmpty(filterString))
-                return View(TestDatabasePleaseDelete.Doctors.ElementAt(indexOfDoctor)
-                        .Prescriptions.ElementAt(indexOfPrescription));
+            var medicineDto = mDoctorManager.GetAllMedicineForAPrescription(prescriptionId, filterString);
 
-            return View(new PrescriptionViewModel
-            {
-                Name = TestDatabasePleaseDelete.Doctors.ElementAt(indexOfDoctor)
-                        .Prescriptions.ElementAt(indexOfPrescription).Name,
-                Medicines = TestDatabasePleaseDelete.Doctors.ElementAt(indexOfDoctor)
-                            .Prescriptions.ElementAt(indexOfPrescription)
-                            .Medicines.Where(x => x.Name.Contains(filterString)).ToList(),
-            });
+
+            var prescriptionDto = mDoctorManager.GetAllPrescriptionsForADoctor(doctorId, null)
+                                                 .FirstOrDefault(x => x.Id == prescriptionId);
+
+            var prescriptionViewModel = mViewModelMapper.Map(prescriptionDto);
+            prescriptionViewModel.Medicines = mViewModelMapper.Map(medicineDto);
+
+            return View(prescriptionViewModel);
         }
 
         public IActionResult Add()

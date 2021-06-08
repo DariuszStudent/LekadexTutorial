@@ -4,8 +4,18 @@ namespace Lekadex.Models
 {
     public class DoctorViewModel
     {
-        public string Name { get; set; }
+        public int Id { get; set; }
 
-        public List<PrescriptionViewModel> Prescriptions { get; set; }
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
+        public string PhoneNumber { get; set; }
+
+        public int WorkYears { get; set; }
+
+        public bool IsAbleToMakePrescriptions { get; set; }
+
+        public virtual List<PrescriptionViewModel> Prescriptions { get; set; }
     }
 }
